@@ -1,0 +1,7 @@
+frontend-app
+frontend-nginx
+backend-app
+backend-nginx
+mysql
+.env
+.vagrant
