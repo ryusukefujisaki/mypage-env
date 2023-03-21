@@ -1,0 +1,68 @@
+networks:
+  default:
+    name: mypage_network
+volumes:
+  socket-volume:
+services:
+  frontend-app:
+    build:
+      context: frontend-app
+      args:
+        APP_ROOT: $APP_ROOT
+    ports:
+      - 5173:5173
+    container_name: frontend-app
+    environment:
+      VITE_BACKEND_HOST: $VITE_BACKEND_HOST
+    volumes:
+      - ./frontend-app:$APP_ROOT
+  frontend-nginx:
+    build:
+      context: frontend-nginx
+    container_name: frontend-nginx
+    ports:
+      - 80:80
+    volumes:
+      - ./frontend-app/dist:/usr/share/nginx/html
+    depends_on:
+      - frontend-app
+  backend-app:
+    build:
+      context: backend-app
+      args:
+        APP_ROOT: $APP_ROOT
+    container_name: backend-app
+    environment:
+      HOST_NAME: $HOST_NAME
+      RAILS_ENV: $RAILS_ENV
+      MYSQL_HOST: $MYSQL_HOST
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
+    volumes:
+      - ./backend-app:$APP_ROOT
+      - socket-volume:${APP_ROOT}/tmp/sockets
+    depends_on:
+      - mysql
+  backend-nginx:
+    build:
+      context: backend-nginx
+    container_name: backend-nginx
+    ports:
+      - 10081:80
+    environment:
+      HOST_NAME: $HOST_NAME
+      APP_ROOT: $APP_ROOT
+    volumes:
+      - socket-volume:${APP_ROOT}/tmp/sockets
+    depends_on:
+      - backend-app
+  mysql:
+    build:
+      context: mysql
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE: $MYSQL_DATABASE
+      MYSQL_USER: $MYSQL_USER
+      MYSQL_PASSWORD: $MYSQL_PASSWORD
