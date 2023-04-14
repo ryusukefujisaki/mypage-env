@@ -2,6 +2,8 @@ networks:
   default:
     name: mypage_network
 volumes:
+  frontend-app-node-modules-volume:
+  frontend-app-dist-volume:
   mysql-volume:
   socket-volume:
 services:
@@ -18,6 +20,8 @@ services:
       VITE_BACKEND_PORT: $VITE_BACKEND_PORT
     volumes:
       - ./frontend-app:$APP_ROOT
+      - frontend-app-node-modules-volume:${APP_ROOT}/node_modules
+      - frontend-app-dist-volume:${APP_ROOT}/dist
   frontend-nginx:
     build:
       context: frontend-nginx
@@ -25,7 +29,7 @@ services:
     ports:
       - 80:80
     volumes:
-      - ./frontend-app/dist:/usr/share/nginx/html
+      - frontend-app-dist-volume:/usr/share/nginx/html
     depends_on:
       - frontend-app
   backend-app:
