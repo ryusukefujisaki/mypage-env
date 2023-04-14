@@ -2,6 +2,9 @@
 
 set -eux
 
+sudo sed -i -e 's/^mirrorlist/#mirrorlist/g' \
+     -e 's/^#baseurl=http:\/\/mirror/baseurl=http:\/\/vault/g' \
+     /etc/yum.repos.d/CentOS-*repo
 sudo dnf config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
 sudo dnf install -y docker-ce docker-ce-cli containerd.io
 sudo systemctl start docker
