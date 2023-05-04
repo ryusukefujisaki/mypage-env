@@ -16,6 +16,7 @@ services:
       - 5173:5173
     container_name: frontend-app
     environment:
+      VITE_BACKEND_SCHEME: $VITE_BACKEND_SCHEME
       VITE_BACKEND_HOST: $VITE_BACKEND_HOST
       VITE_BACKEND_PORT: $VITE_BACKEND_PORT
     volumes:
