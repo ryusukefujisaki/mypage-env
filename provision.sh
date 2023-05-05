@@ -2,6 +2,16 @@
 
 set -eux
 
+sudo dnf update -y
+sudo dnf install -y python3-pip
+pip3 install awscli --user
+# aws configure
+sudo dnf install -y nodejs
+sudo npm install -g npm
+sudo dnf module enable -y nodejs:16
+sudo dnf module install -y nodejs:16
+sudo npm install -g aws-cdk
+
 sudo sed -i -e 's/^mirrorlist/#mirrorlist/g' \
      -e 's/^#baseurl=http:\/\/mirror/baseurl=http:\/\/vault/g' \
      /etc/yum.repos.d/CentOS-*repo
