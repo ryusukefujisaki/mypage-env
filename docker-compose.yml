@@ -48,6 +48,7 @@ services:
       MYSQL_DATABASE: $MYSQL_DATABASE
       MYSQL_USER: $MYSQL_USER
       MYSQL_PASSWORD: $MYSQL_PASSWORD
+      AWS_S3_BUCKET: $AWS_S3_BUCKET
     volumes:
       - ./backend-app:$APP_ROOT
       - socket-volume:${APP_ROOT}/tmp/sockets
